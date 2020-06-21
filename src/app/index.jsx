@@ -1,7 +1,15 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import SearchPage from './components/searchPage';
+import Navbar from './components/navbar';
 
 const App = () => (
-  <h1>Hello World, I am here</h1>
+  <BrowserRouter>
+    <Navbar />
+    <Switch>
+      <Route path="/" component={SearchPage} exact />
+    </Switch>
+  </BrowserRouter>
 );
 
 export default App;
