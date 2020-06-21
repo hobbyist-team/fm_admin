@@ -7,3 +7,6 @@ Development the client app for managing FM
 1. Install / Update node to version 12 (use nvm to manage your node versions)
 2. Navigate to root folder of the app and run `npm ci`
 3. `npm start` to run the app. The app will run on port 5000.
+
+### Linting
+1. `npm run lint` to find out if all linting rules has been satisfied

@@ -12,12 +12,16 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
+    // TODO
+    // MOVE THIS TO ITS CUSTOM HOOK
+    // ADD TEST
     const fetchData = async () => {
       const result = await axios('/api');
       const { data } = result;
       const fmByAscendingTitle = data.sort((a, b) => sortFMByTitle(
         a.title.toUpperCase(), b.title.toUpperCase(),
       ));
+
       setLoading(false);
       setFMList(fmByAscendingTitle);
     };
