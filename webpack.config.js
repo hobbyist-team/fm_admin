@@ -31,7 +31,11 @@ module.exports = {
   resolve: { extensions: ['.js', '.jsx'] },
   devServer: {
     contentBase: resolve(__dirname, 'dist'),
+    host: '0.0.0.0',
     port: 5000,
+    hot: true,
+    open: true,
+    inline: true,
     proxy: {
       '/api': {
         target: 'http://localhost:4567/streams',
@@ -42,7 +46,7 @@ module.exports = {
     },
   },
   plugins: [
-    new HtmlWebPackPlugin({ template: 'src/index.html' }),
+    new HtmlWebPackPlugin({ template: `${resolve(__dirname, 'src/index.html')}` }),
     new MiniCssExtractPlugin({
       chunkFilename: '[id].css',
       filename: '[name].css',

@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  admin:
+    build:
+      context: .
+    ports:
+      - 5000:5000
+    command: npm start
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
