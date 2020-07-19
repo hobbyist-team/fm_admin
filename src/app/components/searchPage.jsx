@@ -46,7 +46,7 @@ const SearchPage = () => {
               <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
             </tr>
           ))
-          : <div>Still loading....</div>}
+          : <>Still loading....</>}
       </tbody>
     </table>
   );
