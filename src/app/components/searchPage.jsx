@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { LinearProgress } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import TextLink from './buttons/textLink';
 
 const SearchPage = () => {
   const [fmList, setFMList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   const sortFMByTitle = (titleA, titleB) => {
     if (titleA < titleB) return -1;
@@ -12,9 +16,6 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    // TODO
-    // MOVE THIS TO ITS CUSTOM HOOK
-    // ADD TEST
     const fetchData = async () => {
       const result = await axios('/api');
       const { data } = result;
@@ -28,27 +29,39 @@ const SearchPage = () => {
     fetchData();
   }, []);
 
+  const onClick = (fm) => {
+    history.push({
+      pathname: '/fm',
+      record: fm,
+      edit: true,
+    });
+  };
+
   return (
-    <table id="fm-stations">
-      <thead>
-        <tr>
-          <th>Station</th>
-          <th>Frequency</th>
-          <th>Image</th>
-        </tr>
-      </thead>
-      <tbody>
-        {!loading && fmList.length > 0
-          ? fmList.map(fm => (
-            <tr key={fm.id}>
-              <td>{fm.title}</td>
-              <td>{fm.frequency}</td>
-              <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
-            </tr>
-          ))
-          : <div>Still loading....</div>}
-      </tbody>
-    </table>
+    <>
+      {!loading && fmList.length > 0
+        ? (
+          <table id="fm-stations">
+            <thead>
+              <tr>
+                <th>Station</th>
+                <th>Frequency</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fmList.map(fm => (
+                <tr key={fm.id} onClick={() => onClick(fm)}>
+                  <td><TextLink text={fm.title} onClick={() => onClick(fm)} /></td>
+                  <td>{fm.frequency}</td>
+                  <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+        : <LinearProgress />}
+    </>
   );
 };
 
