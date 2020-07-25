@@ -33,7 +33,7 @@ const AddButton = ({ setSubmitting, newRecord, disabled, dispatch }) => {
       onClick={submit}
       disabled={disabled}
     >
-      Add New
+      Submit
     </Button>
   );
 };

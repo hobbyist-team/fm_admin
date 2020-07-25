@@ -34,7 +34,7 @@ const UpdateButton = ({ setSubmitting, record, disabled }) => {
       onClick={submit}
       disabled={disabled}
     >
-      Update Record
+      Submit
     </Button>
   );
 };
