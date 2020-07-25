@@ -2,7 +2,7 @@ import React from 'react';
 import { SnackbarProvider } from 'notistack';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SearchPage from './components/searchPage';
-import FM from './components/fm';
+import FMStation from './components/fm';
 import Navbar from './components/navbar';
 
 const App = () => (
@@ -10,7 +10,7 @@ const App = () => (
     <Navbar />
     <Switch>
       <Route path="/" component={SearchPage} exact />
-      <Route path="/add" component={FM} />
+      <Route path="/fm" component={FMStation} />
     </Switch>
   </BrowserRouter>
 );
