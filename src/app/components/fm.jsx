@@ -1,57 +1,51 @@
-import React, { useState, useReducer, useCallback } from 'react';
-import { TextField, Button } from '@material-ui/core';
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
+import React, { useState, useReducer, useEffect } from 'react';
+import { TextField } from '@material-ui/core';
+import { string, shape, bool } from 'prop-types';
+import Delete from './buttons/delete';
+import AddButton from './buttons/add';
+import UpdateButton from './buttons/update';
 
-const initialState = {
-  title: '',
-  url: '',
-  frequency: '',
-  imageUrl: '',
-};
+const FM = ({ edit, record }) => {
+  const initialState = {
+    title: record.title || '',
+    url: record.url || '',
+    frequency: record.frequency || '',
+    imageUrl: record.imageUrl || '',
+  };
 
-const reducer = (state, action) => {
-  const { data } = action;
-  switch (action.type) {
-    case 'reset':
-      return initialState;
-    case 'update':
-      return { ...state, [data.name]: data.value };
-    default:
-      return state;
-  }
-};
+  const reducer = (state, action) => {
+    const { data } = action;
+    switch (action.type) {
+      case 'reset':
+        return initialState;
+      case 'update':
+        return { ...state, [data.name]: data.value };
+      default:
+        return state;
+    }
+  };
 
-const FM = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [submitting, setSubmitting] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [formError, setFormError] = useState('');
 
   const handleChange = (name, value) => {
     dispatch({ type: 'update', data: { name, value } });
   };
 
-  const submit = useCallback((event) => {
-    if (event) event.preventDefault();
-    closeSnackbar();
-    setSubmitting(true);
-    axios.post('/api', state)
-      .then((res) => {
-        if (res) {
-          dispatch({ type: 'reset' });
-          enqueueSnackbar('Successfully Added!!. Add another?');
-        } else {
-          enqueueSnackbar('Oops! Something gone wrong');
-        }
-      })
-      .catch(() => {
-        enqueueSnackbar('Oops! Something gone wrong');
-      });
-    setSubmitting(false);
-  }, [closeSnackbar, enqueueSnackbar, state]);
+  useEffect(() => {
+    Object.keys(state).forEach((key) => {
+      if (state[key] === '') {
+        setFormError('Please add the required information');
+      } else {
+        setFormError('');
+      }
+    });
+  }, [state]);
 
   return (
     <div className="form-grid">
+      <h3>{formError}</h3>
       <TextField
         id="title"
         label="Title"
@@ -76,15 +70,42 @@ const FM = () => {
         value={state.imageUrl}
         onChange={e => handleChange('imageUrl', e.target.value)}
       />
-      <Button
-        type="submit"
-        color="primary"
-        onClick={submit}
-        disabled={submitting}
-      >Submit
-      </Button>
+      {!edit && (
+      <AddButton
+        newRecord={state}
+        setSubmitting={setSubmitting}
+        disabled={submitting || !!formError}
+        dispatch={dispatch}
+      />
+      )}
+      {edit && (
+        <>
+          <UpdateButton
+            record={state}
+            disabled={submitting || !!formError}
+            setSubmitting={setSubmitting}
+          />
+          <Delete id={record.id} />
+        </>
+      )}
     </div>
   );
+};
+
+FM.propTypes = {
+  record: shape({
+    title: string,
+    frequency: string,
+    url: string,
+    imageUrl: string,
+    id: string,
+  }),
+  edit: bool,
+};
+
+FM.defaultProps = {
+  record: {},
+  edit: false,
 };
 
 export default FM;

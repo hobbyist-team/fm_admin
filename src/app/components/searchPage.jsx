@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Button } from '@material-ui/core';
+import { Route } from 'react-router-dom';
+import FMStation from './fm';
 
 const SearchPage = () => {
   const [fmList, setFMList] = useState([]);
@@ -12,9 +15,6 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    // TODO
-    // MOVE THIS TO ITS CUSTOM HOOK
-    // ADD TEST
     const fetchData = async () => {
       const result = await axios('/api');
       const { data } = result;
@@ -28,6 +28,8 @@ const SearchPage = () => {
     fetchData();
   }, []);
 
+  const onClick = fm => <Route path="/fm" render={() => <FMStation record={fm} edit />} />;
+
   return (
     <table id="fm-stations">
       <thead>
@@ -35,6 +37,7 @@ const SearchPage = () => {
           <th>Station</th>
           <th>Frequency</th>
           <th>Image</th>
+          <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -44,6 +47,7 @@ const SearchPage = () => {
               <td>{fm.title}</td>
               <td>{fm.frequency}</td>
               <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
+              <td><Button onClick={() => onClick(fm)}>Click me</Button></td>
             </tr>
           ))
           : <>Still loading....</>}
