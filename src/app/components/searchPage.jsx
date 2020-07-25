@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button } from '@material-ui/core';
-import { Route } from 'react-router-dom';
-import FMStation from './fm';
+import { useHistory } from 'react-router-dom';
 
 const SearchPage = () => {
   const [fmList, setFMList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   const sortFMByTitle = (titleA, titleB) => {
     if (titleA < titleB) return -1;
@@ -28,7 +28,13 @@ const SearchPage = () => {
     fetchData();
   }, []);
 
-  const onClick = fm => <Route path="/fm" render={() => <FMStation record={fm} edit />} />;
+  const onClick = (fm) => {
+    history.push({
+      pathname: '/fm',
+      record: fm,
+      edit: true,
+    });
+  };
 
   return (
     <table id="fm-stations">
@@ -37,7 +43,6 @@ const SearchPage = () => {
           <th>Station</th>
           <th>Frequency</th>
           <th>Image</th>
-          <th>Edit</th>
         </tr>
       </thead>
       <tbody>

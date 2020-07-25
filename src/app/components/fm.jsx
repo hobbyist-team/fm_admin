@@ -1,11 +1,14 @@
 import React, { useState, useReducer, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
-import { string, shape, bool } from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import Delete from './buttons/delete';
 import AddButton from './buttons/add';
 import UpdateButton from './buttons/update';
 
-const FM = ({ edit, record }) => {
+const FM = () => {
+  const location = useLocation();
+  const { record = {}, edit } = location;
+
   const initialState = {
     title: record.title || '',
     url: record.url || '',
@@ -34,13 +37,17 @@ const FM = ({ edit, record }) => {
   };
 
   useEffect(() => {
-    Object.keys(state).forEach((key) => {
+    const errorCount = Object.keys(state).reduce((acc, key) => {
       if (state[key] === '') {
-        setFormError('Please add the required information');
-      } else {
-        setFormError('');
+        return acc + 1;
       }
-    });
+      return acc;
+    }, 0);
+    if (errorCount > 0) {
+      setFormError('Please add the required information');
+    } else {
+      setFormError('');
+    }
   }, [state]);
 
   return (
@@ -90,22 +97,6 @@ const FM = ({ edit, record }) => {
       )}
     </div>
   );
-};
-
-FM.propTypes = {
-  record: shape({
-    title: string,
-    frequency: string,
-    url: string,
-    imageUrl: string,
-    id: string,
-  }),
-  edit: bool,
-};
-
-FM.defaultProps = {
-  record: {},
-  edit: false,
 };
 
 export default FM;

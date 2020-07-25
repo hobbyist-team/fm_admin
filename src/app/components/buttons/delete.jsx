@@ -3,8 +3,10 @@ import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core';
 import { string } from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router-dom';
 
 const DeleteButton = ({ id }) => {
+  const history = useHistory();
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -18,6 +20,7 @@ const DeleteButton = ({ id }) => {
       .then((res) => {
         if (res) {
           enqueueSnackbar('Successfully removed the record');
+          history.push({ pathname: '/' });
         } else {
           enqueueSnackbar('Oh oh, something went horribly wrong');
         }
@@ -26,7 +29,7 @@ const DeleteButton = ({ id }) => {
         enqueueSnackbar('Oh oh, something went horribly wrong');
       });
     setOpen(false);
-  }, [closeSnackbar, enqueueSnackbar, id]);
+  }, [closeSnackbar, enqueueSnackbar, history, id]);
 
   return (
     <>
