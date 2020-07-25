@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import TextLink from './buttons/textLink';
 
 const SearchPage = () => {
   const [fmList, setFMList] = useState([]);
@@ -37,27 +38,30 @@ const SearchPage = () => {
   };
 
   return (
-    <table id="fm-stations">
-      <thead>
-        <tr>
-          <th>Station</th>
-          <th>Frequency</th>
-          <th>Image</th>
-        </tr>
-      </thead>
-      <tbody>
-        {!loading && fmList.length > 0
-          ? fmList.map(fm => (
-            <tr key={fm.id}>
-              <td>{fm.title}</td>
-              <td>{fm.frequency}</td>
-              <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
-              <td><Button onClick={() => onClick(fm)}>Click me</Button></td>
-            </tr>
-          ))
-          : <>Still loading....</>}
-      </tbody>
-    </table>
+    <>
+      {!loading && fmList.length > 0
+        ? (
+          <table id="fm-stations">
+            <thead>
+              <tr>
+                <th>Station</th>
+                <th>Frequency</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fmList.map(fm => (
+                <tr key={fm.id} onClick={() => onClick(fm)}>
+                  <td><TextLink text={fm.title} onClick={() => onClick(fm)} /></td>
+                  <td>{fm.frequency}</td>
+                  <td className="fm-img"><img src={fm.imageUrl} alt={fm.title} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+        : <LinearProgress />}
+    </>
   );
 };
 

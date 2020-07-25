@@ -20,6 +20,23 @@ table {
   th, td {
     padding: 0.25rem;
     border: 1px solid black;
+
+    .textLink {
+      border-style: none;
+      cursor: pointer;
+      display: inline;
+      perspective-origin: 0 0;
+      text-align: start;
+      text-decoration: underline;
+      color: blue;
+      font-size: 1em;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      background: rgba(0, 0, 0, 0);
+    }
   }
 
   th {
